@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-
+# Cleans up weird format of merged Pacbio vcf file for insertions and deletions.
 
 import sys
 
