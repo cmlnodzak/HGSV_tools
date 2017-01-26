@@ -1,5 +1,5 @@
 #!/usr/bin/Python3
-
+#scrap code, used to format data table when preparing to overlapping eQTL SNPs from literature to the Trio SNPs.
 import sys
 input = sys.argv[1]
 
