@@ -83,7 +83,7 @@ class VCFparser:
 
 infile = 'PASS_Illumina_Integrate_20170206.ALL.vcf'
 
-VCFparser(infile)
+x = VCFparser(infile)
 
 
 
