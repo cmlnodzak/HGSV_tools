@@ -73,11 +73,15 @@ class VCFparser:
 
 # x = BedTool.from_dataframe(df)
 
+
+gencode = BedTool('gencode.v25.annotation.gtf')
+
+
 infile = 'PASS_Illumina_Integrate_20170206.ALL.vcf'
 
 x = VCFparser(infile)
 
-
+### grab the Bedtools.
 HG00512 = x.bedtoolsList[0]
 HG00513 = x.bedtoolsList[1]
 HG00514 = x.bedtoolsList[2]
