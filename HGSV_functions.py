@@ -58,7 +58,8 @@ class VCFparser:
                                     self.frame = self.frame.append(call)
                                     outfile.write(call+'\n')
         self.bedtoolsList = self._Frame2Bed(self.frame,hgsv_list)
-
+        self._getBedTools(hgsv_list)
+        
 #pass in a list of sample names as they are written in the file
     def _Frame2Bed(df,samples):
         bedList = []
@@ -71,20 +72,20 @@ class VCFparser:
             bedList.append(i_bt)
         return bedList
 
-    def getBedToolsList(self):
-        return self.bedtoolsList
+    def _getBedTools(self,samples):
+        for k in samples:
+            k = self.bedtoolsList[k]
+            print('creating bedtool for sample ' + k +' \n')
+            return k
 
 
 # x = BedTool.from_dataframe(df)
 
 infile = 'PASS_Illumina_Integrate_20170206.ALL.vcf'
 
-x = VCFparser(infile)
+VCFparser(infile)
 
-y = x.getBedToolsList()
 
-for i in hgsv_list:
-    i = y[i]
 
                             
                             
