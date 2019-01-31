@@ -32,9 +32,8 @@ hgsv_list = ['HG00512','HG00513','HG00514', 'HG00731', 'HG00732', 'HG00733', 'NA
 class VCFparser:
     def __init__(self,infile):
         self.bedtoolsList = []
-        self.frame  = pd.DataFrame(columns = col_names)
-        
         with open(infile) as SVs, open(outfy,'w') as outfile:
+                data = []
                 for line in SVs.readlines():
                         if line.startswith('#'):
                                 continue
@@ -43,25 +42,23 @@ class VCFparser:
                                 end = line[7].split(';')[1].split('=')[1]
                                 line.pop(2)
                                 line.insert(2,end)
-                                data = []
                                 info = line[7].split(';')[7].split(',')
                                 for genos in info:
                                         geno = genos.split(':')
                                         sampid = str(geno[4])
-                                        genetype = str(geno[3])
-                                        triotype = sampid + '\t' + genetype
+                                        genotype = str(geno[3])
                                         SVdata=line[0:7]
-                                        SVdata.append(triotype)
+                                        SVdata.append(sampid)
+                                        SVdata.append(genotype)
+                                        data.append(SVdata)
                                         keep="\t".join(SVdata)
-                                        data.append(keep)
-                                for call in data:
-                                    self.frame = self.frame.append(call)
-                                    outfile.write(call+'\n')
+                                        outfile.write(keep+'\n')                  
+                self.frame = pd.DataFrame.from_records(data)
+                self.frame.columns = col_names
         self.bedtoolsList = self._Frame2Bed(self.frame,hgsv_list)
-        self._getBedTools(hgsv_list)
         
 #pass in a list of sample names as they are written in the file
-    def _Frame2Bed(df,samples):
+    def _Frame2Bed(self,df,samples):
         bedList = []
         # extract heterozygous deletions and insertions, group by samples.
         df = df.loc[df['GT'] == '0/1']
@@ -72,11 +69,6 @@ class VCFparser:
             bedList.append(i_bt)
         return bedList
 
-    def _getBedTools(self,samples):
-        for k in samples:
-            k = self.bedtoolsList[k]
-            print('creating bedtool for sample ' + k +' \n')
-            return k
 
 
 # x = BedTool.from_dataframe(df)
@@ -85,6 +77,16 @@ infile = 'PASS_Illumina_Integrate_20170206.ALL.vcf'
 
 x = VCFparser(infile)
 
+
+HG00512 = x.bedtoolsList[0]
+HG00513 = x.bedtoolsList[1]
+HG00514 = x.bedtoolsList[2]
+HG00731 = x.bedtoolsList[3]
+HG00732 = x.bedtoolsList[4]
+HG00733 = x.bedtoolsList[5]
+NA19238 = x.bedtoolsList[6]
+NA19239 = x.bedtoolsList[7]
+NA19240 = x.bedtoolsList[8]
 
 
                             
